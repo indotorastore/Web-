@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Registrasi</title>
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --secondary-color: #818cf8;
+            --dark-color: #1e293b;
+            --light-color: #f8fafc;
+            --success-color: #10b981;
+            --error-color: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #a5b4fc, #6366f1);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 400px;
+            height: 500px;
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .card {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            transform-style: preserve-3d;
+            transition: transform 0.8s;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            backface-visibility: hidden;
+            background-color: #ffffff;
+            border-radius: 20px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .input-group label {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: #64748b;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            outline: none;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus,
+        .input-group input:not(:placeholder-shown) {
+            border-color: var(--primary-color);
+        }
+
+        .input-group input:focus + label,
+        .input-group input:not(:placeholder-shown) + label {
+            top: -10px;
+            left: 10px;
+            background-color: white;
+            padding: 0 5px;
+            font-size: 12px;
+            color: var(--primary-color);
+        }
+
+        .btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(79, 70, 229, 0.4);
+        }
+
+        .toggle-form {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .toggle-form a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .toggle-form a:hover {
+            text-decoration: underline;
+        }
+
+        .social-login {
+            margin-top: 20px;
+        }
+
+        .social-login p {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #64748b;
+            position: relative;
+        }
+
+        .social-login p::before,
+        .social-login p::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 35%;
+            height: 1px;
+            background-color: #e2e8f0;
+        }
+
+        .social-login p::before {
+            left: 0;
+        }
+
+        .social-login p::after {
+            right: 0;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .social-icons button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid #e2e8f0;
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .social-icons button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .social-icons i {
+            font-size: 18px;
+        }
+
+        .github-icon {
+            color: #333;
+        }
+
+        .google-icon {
+            color: #DB4437;
+        }
+
+        .facebook-icon {
+            color: #4267B2;
+        }
+
+        .message {
+            text-align: center;
+            margin-top: 15px;
+            padding: 8px;
+            border-radius: 5px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .success {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
+        }
+
+        .error {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--error-color);
+            border: 1px solid var(--error-color);
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="card" id="card">
+            <!-- Login Form (Front) -->
+            <div class="card-face card-front">
+                <h1>Masuk</h1>
+                <form id="loginForm">
+                    <div class="input-group">
+                        <input type="email" id="loginEmail" placeholder=" " required>
+                        <label for="loginEmail">Email</label>
+                    </div>
+                    <div class="input-group">
+                        <input type="password" id="loginPassword" placeholder=" " required>
+                        <label for="loginPassword">Kata Sandi</label>
+                    </div>
+                    <button type="submit" class="btn">Masuk</button>
+                    <div class="message" id="loginMessage"></div>
+                    <div class="toggle-form">
+                        Belum punya akun? <a id="showRegister">Daftar sekarang</a>
+                    </div>
+                    <div class="social-login">
+                        <p>Atau masuk dengan</p>
+                        <div class="social-icons">
+                            <button type="button" id="githubLogin">
+                                <i class="fab fa-github github-icon"></i>
+                            </button>
+                            <button type="button" id="googleLogin">
+                                <i class="fab fa-google google-icon"></i>
+                            </button>
+                            <button type="button" id="facebookLogin">
+                                <i class="fab fa-facebook-f facebook-icon"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Register Form (Back) -->
+            <div class="card-face card-back">
+                <h1>Daftar</h1>
+                <form id="registerForm">
+                    <div class="input-group">
+                        <input type="text" id="registerName" placeholder=" " required>
+                        <label for="registerName">Nama Lengkap</label>
+                    </div>
+                    <div class="input-group">
+                        <input type="email" id="registerEmail" placeholder=" " required>
+                        <label for="registerEmail">Email</label>
+                    </div>
+                    <div class="input-group">
+                        <input type="password" id="registerPassword" placeholder=" " required>
+                        <label for="registerPassword">Kata Sandi</label>
+                    </div>
+                    <div class="input-group">
+                        <input type="password" id="confirmPassword" placeholder=" " required>
+                        <label for="confirmPassword">Konfirmasi Kata Sandi</label>
+                    </div>
+                    <button type="submit" class="btn">Daftar</button>
+                    <div class="message" id="registerMessage"></div>
+                    <div class="toggle-form">
+                        Sudah punya akun? <a id="showLogin">Masuk</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle between login and register forms
+        const card = document.getElementById('card');
+        const showRegister = document.getElementById('showRegister');
+        const showLogin = document.getElementById('showLogin');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const loginMessage = document.getElementById('loginMessage');
+        const registerMessage = document.getElementById('registerMessage');
+
+        // Show register form
+        showRegister.addEventListener('click', function() {
+            card.classList.add('flipped');
+        });
+
+        // Show login form
+        showLogin.addEventListener('click', function() {
+            card.classList.remove('flipped');
+        });
+
+        // Login form submission
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // Here you would normally send the data to your server or GitHub OAuth
+            // This is just a simulation for demonstration
+            if (email && password) {
+                showMessage(loginMessage, 'Login berhasil! Mengarahkan...', 'success');
+                // Redirect to dashboard or home page after successful login
+                setTimeout(() => {
+                    // window.location.href = 'dashboard.html';
+                    alert('Simulasi login berhasil. Dalam implementasi asli, pengguna akan diarahkan ke halaman dashboard.');
+                }, 2000);
+            } else {
+                showMessage(loginMessage, 'Email atau kata sandi tidak valid', 'error');
+            }
+        });
+
+        // Register form submission
+        registerForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPass = document.getElementById('confirmPassword').value;
+            
+            // Validate password match
+            if (password !== confirmPass) {
+                showMessage(registerMessage, 'Kata sandi tidak cocok', 'error');
+                return;
+            }
+            
+            // Here you would normally send the data to your server or GitHub API
+            // This is just a simulation for demonstration
+            if (name && email && password) {
+                showMessage(registerMessage, 'Pendaftaran berhasil! Silakan masuk.', 'success');
+                // Flip back to login form after successful registration
+                setTimeout(() => {
+                    card.classList.remove('flipped');
+                }, 2000);
+            } else {
+                showMessage(registerMessage, 'Mohon lengkapi semua data', 'error');
+            }
+        });
+
+        // Social login buttons (would be integrated with actual OAuth in production)
+        document.getElementById('githubLogin').addEventListener('click', function() {
+            // In a real implementation, this would redirect to GitHub OAuth
+            alert('Ini akan mengarahkan ke autentikasi GitHub dalam implementasi asli.');
+        });
+
+        document.getElementById('googleLogin').addEventListener('click', function() {
+            alert('Ini akan mengarahkan ke autentikasi Google dalam implementasi asli.');
+        });
+
+        document.getElementById('facebookLogin').addEventListener('click', function() {
+            alert('Ini akan mengarahkan ke autentikasi Facebook dalam implementasi asli.');
+        });
+
+        // Show message function
+        function showMessage(element, message, type) {
+            element.textContent = message;
+            element.className = `message ${type}`;
+            element.style.display = 'block';
+            
+            // Hide message after 3 seconds
+            setTimeout(() => {
+                element.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
